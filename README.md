@@ -1,100 +1,139 @@
-Devops Project# ☕ Azure Java Web App CI/CD
+# ☁ Azure Java Web App CI/CD Pipeline
 
-> Build, test, package and deploy a Java Web Application to Azure App Service using Azure DevOps CI/CD Pipelines.
+> A production-style Java Web Application automatically built, tested, packaged and deployed to **Azure App Service** using **Azure DevOps CI/CD Pipelines**.
 
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Maven](https://img.shields.io/badge/Maven-Build-red)
-![Azure](https://img.shields.io/badge/Azure-App%20Service-blue)
 ![Azure DevOps](https://img.shields.io/badge/Azure%20DevOps-CI%2FCD-blue)
+![Azure](https://img.shields.io/badge/Azure-App%20Service-blue)
 ![GitHub](https://img.shields.io/badge/GitHub-Repository-black)
-![License](https://img.shields.io/badge/License-MIT-green)
+![Linux](https://img.shields.io/badge/Linux-App%20Service-green)
 
 ---
 
-# 📖 Project Overview
+# 🚀 Project Overview
 
-This project demonstrates a complete Continuous Integration and Continuous Deployment (CI/CD) pipeline for a Java Web Application using **Azure DevOps**.
+This project demonstrates a complete **Continuous Integration and Continuous Deployment (CI/CD)** solution for a Java Web Application using **Azure DevOps** and **Azure App Service (Linux)**.
 
-The pipeline automatically:
+The solution automatically performs the following tasks every time code is pushed to GitHub:
 
-- Builds the application using Maven
-- Executes JUnit tests
-- Packages the application into a WAR file
-- Publishes the WAR as a Pipeline Artifact
-- Deploys the application to Azure App Service (Linux)
+- ✅ Checkout source code
+- ✅ Build the application using Maven
+- ✅ Execute JUnit unit tests
+- ✅ Package the application into a WAR file
+- ✅ Publish the WAR as a Pipeline Artifact
+- ✅ Deploy the application to Azure App Service
+- ✅ Make the application immediately available online
 
-This project forms part of a complete DevOps portfolio alongside the **terraform-azure-webapp** repository, where the Azure infrastructure is provisioned using Terraform.
-
----
-
-# 🏗️ Architecture Diagram
-
-![Architecture](azure-java-webapp-ci-cd.png)
+The project showcases a real-world Azure DevOps deployment pipeline and forms part of my Azure DevOps portfolio.
 
 ---
 
-# 🚀 CI/CD Pipeline
+# 🏗 Architecture Overview
 
-The Azure DevOps pipeline consists of two stages.
-
-## Stage 1 – Build
-
-✔ Checkout Source Code
-
-✔ Build using Maven
-
-✔ Run Unit Tests
-
-✔ Generate WAR Package
-
-✔ Publish Pipeline Artifact
+![Architecture Diagram](azure-java-webapp-ci-cd.png)
 
 ---
 
-## Stage 2 – Deploy
+# ⚙ Solution Architecture
 
-✔ Download Pipeline Artifact
-
-✔ Deploy WAR to Azure Linux Web App
-
-✔ Verify Successful Deployment
+```
+Developer
+     │
+     ▼
+ GitHub Repository
+     │
+     ▼
+ Azure DevOps Pipeline
+     │
+     ├───────────────┐
+     ▼               │
+ Build              Unit Tests
+     │               │
+     └──────┬────────┘
+            ▼
+      Package WAR
+            │
+            ▼
+ Publish Pipeline Artifact
+            │
+            ▼
+ Deploy to Azure App Service
+            │
+            ▼
+ Azure Linux Web App
+            │
+            ▼
+ Live Application
+```
 
 ---
 
-# ☁️ Azure Resources
+# 🚀 Azure DevOps Pipeline
 
-The application is deployed to the following Azure resources:
+The Azure DevOps pipeline consists of two fully automated stages.
 
-- Azure Resource Group
-- Azure App Service Plan (Linux)
-- Azure Linux Web App
-- Azure Resource Manager Service Connection
+## Stage 1 — Build
+
+- Checkout Source Code
+- Install Java 17
+- Restore Maven Dependencies
+- Compile Application
+- Execute JUnit Tests
+- Package WAR File
+- Publish Pipeline Artifact
 
 ---
 
-# 📁 Repository Structure
+## Stage 2 — Deploy
+
+- Download Pipeline Artifact
+- Deploy WAR to Azure App Service (Linux)
+- Restart Web Application
+- Verify Successful Deployment
+
+---
+
+# ☁ Azure Resources
+
+The solution deploys to the following Azure resources.
+
+| Resource | Purpose |
+|-----------|---------|
+| Resource Group | Container for Azure resources |
+| App Service Plan (Linux) | Hosting environment |
+| Azure Linux Web App | Hosts the Java application |
+| Azure Resource Manager Service Connection | Secure deployment authentication |
+
+---
+
+# 📂 Repository Structure
 
 ```text
 azure-java-webapp-ci-cd
 │
 ├── server/
 ├── webapp/
+│   └── src/main/webapp/index.jsp
+│
 ├── pom.xml
 ├── azure-pipelines.yml
 ├── Dockerfile
 ├── AzureDockerfile
 ├── README.md
-└── architecture.png
+├── azure-java-webapp-ci-cd.png
+│
+└── .gitignore
 ```
 
 ---
 
-# ⚙️ Technologies Used
+# 💻 Technologies Used
 
 | Technology | Purpose |
 |------------|---------|
-| Java 17 | Programming Language |
-| Maven | Build Tool |
+| Java 17 | Application Development |
+| Maven | Build Automation |
 | JUnit | Unit Testing |
 | Azure DevOps | CI/CD Pipeline |
 | Azure App Service | Application Hosting |
@@ -103,74 +142,41 @@ azure-java-webapp-ci-cd
 
 ---
 
-# 🔄 Pipeline Workflow
-
-```text
-Developer
-     │
-     ▼
-GitHub Repository
-     │
-     ▼
-Azure DevOps Pipeline
-     │
-     ▼
-Build
-     │
-     ▼
-Unit Tests
-     │
-     ▼
-Package WAR
-     │
-     ▼
-Publish Pipeline Artifact
-     │
-     ▼
-Deploy
-     │
-     ▼
-Azure App Service (Linux)
-     │
-     ▼
-Running Java Application
-```
-
----
-
-# 📸 Screenshots
+# 📸 Project Screenshots
 
 ## Azure DevOps Pipeline
 
-> *(Add a screenshot of the successful Build and Deploy pipeline here.)*
+*(Replace with your successful pipeline screenshot)*
 
-```
-images/pipeline-success.png
-```
+![Azure DevOps Pipeline](images/pipeline-success.png)
 
 ---
 
-## Azure App Service
+## Azure Portal
 
-> *(Add a screenshot of the Azure Web App Overview page.)*
+*(Replace with your Azure App Service Overview screenshot)*
 
-```
-images/azure-webapp.png
-```
+![Azure App Service](images/azure-webapp.png)
 
 ---
 
 ## Running Application
 
-> *(Add a screenshot showing the deployed Java application.)*
+*(Replace with your deployed application screenshot)*
 
-```
-images/running-application.png
-```
+![Running Application](images/running-application.png)
 
 ---
 
-# ▶️ Running Locally
+# 🌍 Live Demo
+
+Azure Web Application
+
+https://devops-webapp-farooq.azurewebsites.net
+
+---
+
+# ▶ Running Locally
 
 Clone the repository
 
@@ -178,7 +184,7 @@ Clone the repository
 git clone https://github.com/blueberry247/azure-java-webapp-ci-cd.git
 ```
 
-Navigate to the project
+Move into the project
 
 ```bash
 cd azure-java-webapp-ci-cd
@@ -190,7 +196,7 @@ Build the application
 mvn clean package
 ```
 
-Run locally (if supported)
+Run locally
 
 ```bash
 mvn tomcat7:run
@@ -198,63 +204,119 @@ mvn tomcat7:run
 
 ---
 
-# ☁️ Azure Deployment
+# ☁ Automated Deployment
 
-Deployment is fully automated using Azure DevOps.
+Every push to the **master** branch automatically triggers:
 
-Every push to the **master** branch automatically:
+```
+Git Push
+      │
+      ▼
+Azure DevOps
+      │
+      ▼
+Build
+      │
+      ▼
+Unit Tests
+      │
+      ▼
+Package WAR
+      │
+      ▼
+Publish Artifact
+      │
+      ▼
+Deploy to Azure App Service
+      │
+      ▼
+Live Website
+```
 
-- Builds the application
-- Executes unit tests
-- Packages the WAR file
-- Publishes the artifact
-- Deploys the application to Azure App Service
+No manual deployment is required.
 
 ---
 
 # 📌 Related Project
 
-Infrastructure for this application is provisioned using Terraform.
+The Azure infrastructure used by this application is provisioned using Terraform.
 
 Repository:
 
-➡️ **terraform-azure-webapp**
+**terraform-azure-webapp**
 
-This repository contains:
+Features include:
 
 - Azure Resource Group
 - Azure App Service Plan
 - Azure Linux Web App
+- Infrastructure as Code
 - Azure DevOps Infrastructure Pipeline
+
+Together these repositories demonstrate both:
+
+- Infrastructure Deployment (Terraform)
+- Application Deployment (Azure DevOps CI/CD)
 
 ---
 
 # 👨‍💻 Author
 
-**Mohammed Farooq**
+## Mohammed Farooq
 
-Infrastructure Engineer | Azure | Terraform | Azure DevOps | CI/CD | Java
+Infrastructure Engineer
 
-GitHub:
+Specialising in
+
+- Azure
+- Azure DevOps
+- Terraform
+- CI/CD
+- Java
+- GitHub
+
+GitHub
 
 https://github.com/blueberry247
 
 ---
 
-# ⭐ Future Improvements
+# 🎯 Skills Demonstrated
 
-- Azure Key Vault integration
-- Terraform Remote State
+- Azure DevOps Pipelines
+- Continuous Integration
+- Continuous Deployment
+- Azure App Service
+- Maven
+- Java
+- JUnit Testing
+- Pipeline Artifacts
+- GitHub Integration
+- Linux App Service
+- Infrastructure Deployment
+- DevOps Best Practices
+
+---
+
+# 🚀 Future Enhancements
+
+- Docker Containerisation
+- Azure Container Registry (ACR)
+- Azure Kubernetes Service (AKS)
+- Helm Charts
+- Azure Key Vault
+- SonarQube Integration
+- Application Insights
 - Deployment Slots
-- Approval Gates
-- SonarQube Code Analysis
+- GitHub Actions
 - OWASP Dependency Scanning
-- Docker Container Deployment
-- AKS Deployment
-- Monitoring with Azure Application Insights
 
 ---
 
 # 📜 License
 
-This project is licensed under the MIT License.
+This project is released under the MIT License.
+
+---
+
+⭐ If you found this project useful, please consider starring the repository.
