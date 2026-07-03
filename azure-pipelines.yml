@@ -12,9 +12,6 @@
 
 #############################################################
 # Trigger
-#
-# Run this pipeline automatically whenever code is pushed
-# to the master branch.
 #############################################################
 
 trigger:
@@ -22,8 +19,6 @@ trigger:
 
 #############################################################
 # Agent Pool
-#
-# Use Microsoft's Ubuntu hosted build agent.
 #############################################################
 
 pool:
@@ -37,10 +32,6 @@ stages:
 
 #############################################################
 # Stage 1 - Build
-#
-# Compile the Java application using Maven.
-# Create the WAR file.
-# Publish the WAR as a pipeline artifact.
 #############################################################
 
 - stage: Build
@@ -48,31 +39,19 @@ stages:
 
   jobs:
 
-  ###########################################################
-  # Build Job
-  ###########################################################
-
   - job: Build
     displayName: 'Build with Maven'
 
     steps:
 
     #########################################################
-    # Checkout Source Code
-    #
-    # Download the latest source code from GitHub.
+    # Checkout Source
     #########################################################
 
     - checkout: self
 
     #########################################################
-    # Build Application with Maven
-    #
-    # Uses pom.xml
-    # Downloads dependencies
-    # Compiles the application
-    # Runs unit tests
-    # Packages the application into a WAR file
+    # Build Java Application
     #########################################################
 
     - task: Maven@3
@@ -82,23 +61,17 @@ stages:
         mavenPomFile: 'pom.xml'
         mavenOptions: '-Xmx3072m'
 
-        # Use Microsoft JDK 11
         javaHomeOption: 'JDKVersion'
         jdkVersionOption: '17'
         jdkArchitectureOption: 'x64'
 
-        # Publish JUnit test results
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
 
-        # Execute Maven package goal
         goals: 'package'
 
     #########################################################
-    # Locate WAR File
-    #
-    # Displays the location of the generated WAR file.
-    # Useful for troubleshooting.
+    # Locate WAR
     #########################################################
 
     - script: |
@@ -107,10 +80,7 @@ stages:
       displayName: 'Locate WAR'
 
     #########################################################
-    # Copy WAR File
-    #
-    # Copy the generated WAR file into the Pipeline
-    # Artifact Staging Directory.
+    # Copy WAR
     #########################################################
 
     - task: CopyFiles@2
@@ -122,10 +92,7 @@ stages:
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
     #########################################################
-    # Publish Pipeline Artifact
-    #
-    # Store the WAR file so it can be downloaded by
-    # later stages in the pipeline.
+    # Publish Artifact
     #########################################################
 
     - task: PublishPipelineArtifact@1
@@ -137,42 +104,28 @@ stages:
 
 #############################################################
 # Stage 2 - Deploy
-#
-# Download the published WAR artifact.
-# Deploy the application to Azure Linux Web App.
 #############################################################
 
 - stage: Deploy
   displayName: 'Deploy to Azure Web App'
 
-  # Only run if the Build stage succeeds.
   dependsOn: Build
 
   jobs:
 
-  ###########################################################
-  # Deployment Job
-  ###########################################################
-
   - deployment: DeployWebApp
     displayName: 'Deploy WAR'
 
-    # Azure DevOps Environment
     environment: 'Production'
 
     strategy:
-
       runOnce:
-
         deploy:
 
           steps:
 
           #####################################################
-          # Download Pipeline Artifact
-          #
-          # Retrieve the WAR file published during the
-          # Build stage.
+          # Download Artifact
           #####################################################
 
           - download: current
@@ -180,8 +133,6 @@ stages:
 
           #####################################################
           # Verify Download
-          #
-          # Display downloaded files for troubleshooting.
           #####################################################
 
           - script: |
@@ -190,39 +141,40 @@ stages:
             displayName: 'Verify Download'
 
           #####################################################
-          # Deploy to Azure App Service
-          #
-          # Connect to Azure using the Azure DevOps
-          # Service Connection.
-          #
-          # Deploy the WAR file to the Linux Web App.
+          # Rename WAR to ROOT.war
+          #####################################################
+
+          - script: |
+              echo "Renaming webapp.war to ROOT.war..."
+              cp $(Pipeline.Workspace)/java-webapp/webapp.war $(Pipeline.Workspace)/java-webapp/ROOT.war
+
+              echo ""
+              echo "Files after rename:"
+              ls -l $(Pipeline.Workspace)/java-webapp
+            displayName: 'Rename WAR to ROOT.war'
+
+          #####################################################
+          # Deploy ROOT.war
           #####################################################
 
           - task: AzureWebApp@1
             displayName: 'Deploy to Azure Web App'
 
             inputs:
-
-              # Azure Service Connection
               azureSubscription: 'devops'
-
-              # Deploy to Azure Linux App Service
               appType: 'webAppLinux'
-
-              # Name of the Azure Web App
               appName: 'devops-webapp-farooq'
-
-              # WAR file to deploy
-              package: '$(Pipeline.Workspace)/java-webapp/*.war'
+              package: '$(Pipeline.Workspace)/java-webapp/ROOT.war'
 
           #####################################################
           # Deployment Complete
-          #
-          # Display a success message when deployment finishes.
           #####################################################
+
           - script: |
               echo "=========================================="
-              echo "Java Web Application deployed successfully!"
-              echo "Azure Web App: devops-webapp-farooq"
+              echo "Deployment Successful!"
+              echo ""
+              echo "Application URL:"
+              echo "https://devops-webapp-farooq.azurewebsites.net"
               echo "=========================================="
             displayName: 'Deployment Complete'
